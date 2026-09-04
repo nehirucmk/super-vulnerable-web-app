@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace Dashboard</title>
+    <style>
+        body { background-color: #69a9dd; font-family: system-ui, -apple-system, sans-serif; margin: 0; }
+        .navbar { background: #0f0d07; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #0f0d07; text-decoration: none; padding: 6px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: flex; gap: 30px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex: 1; }
+        .card-wide { flex: 2; }
+        .form-control { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; }
+        textarea.form-control { resize: vertical; height: 100px; }
+        .btn { width: 100%; padding: 10px; background: #212529; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-danger { background: #da5562; width: auto; padding: 4px 10px; font-size: 12px; margin-top: 8px; display: inline-block; }
+        .item-box { border-bottom: 1px solid #dee2e6; padding: 15px 0; }
+        .item-box:last-child { border-bottom: none; }
+        h4 { margin-top: 0; color: #212529; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <strong>BEST USED GOODS</strong>
+        <div>
+            <span style="margin-right: 15px;">User: <strong>{{ session['username'] }}</strong></span>
+            {% if session['username'] ==  'admin' %}
+                <a href="/admin" style="background: #dc3545; border-color: #dc3545; margin-right: 10px;">Admin Panel</a>
+            {% endif %}
+            <a href="/logout" style="background: #ced4da; border-color: #0f0d07;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h4>Add Products</h4>
+            <form action="/products" method="POST" enctype="multipart/form-data">
+                <label>Product Name</label>
+                <input type="text" class="form-control" name="name" required>
+
+                <label>Product Image</label>
+                <input type="file" class="form-control" name="image" required>
+
+                <label>Description</label>
+                <textarea class="form-control" name="description" required></textarea>
+               
+                <button type="submit" class="btn">Publish Item</button>
+            </form>
+        </div>
+
+        <div class="card card-wide">
+            <h4>Available Listings</h4>
+            <div>
+                {% for item in items %}
+                    <div class="item-box">
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>{{ item[1] }}</strong>
+                            <span style="color: #6c757d; font-size: 13px;">Seller: {{ item[3] }}</span>
+                        </div>
+                        <p style="color: #495057; margin: 8px 0;">Description: {{ item[2] | safe }}</p>
+                       
+                        <div style="margin-top: 10px;">
+                            <a href="/static/uploads/{{item[4]}}" target="_blank" style="color: #0d6efd; font-weight: bold; font-size: 14px;">[View Attached File</a>
+                        </div>
+                        
+                        {% if session['username'] == item[3] %}
+                            <a href="/delete_product?id={{ item[0] }}" class="btn btn-danger">Delete</a>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p style="color: #6c757d;">No products listed yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
