@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - System Settings</title>
+    <style>
+        body { background-color: #f8f9fa; font-family: system-ui, sans-serif; margin: 0; padding: 40px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 800px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #dee2e6; text-align: left; }
+        th { background: #212529; color: white; }
+        .btn-back { display: inline-block; margin-top: 20px; padding: 8px 16px; background: #6c757d; color: white; text-decoration: none; border-radius: 6px; }
+       
+        .diag-container { margin-top: 40px; border-top: 2px dashed #dee2e6; padding-top: 20px; }
+        .diag-form { display: flex; gap: 10px; margin-bottom: 20px; }
+        .diag-input { flex: 1; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; }
+        .diag-btn { padding: 10px 20px; background: #0d6efd; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .diag-terminal { background: #000; color: #0f0; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-family: monospace; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Admin Control Panel</h2>
+       
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>User Password</th>
+            </tr>
+            {% for user in all_users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td><code>{{ user[2] }}</code></td>
+            </tr>
+            {% endfor %}
+        </table>
+       
+        <div class="diag-container">
+            <h3 style="color: #212529; margin-bottom: 5px;">System Diagnostics</h3>
+            <p style="color: #6c757d; font-size: 14px; margin-top: 0;">Test connection to other servers</p>
+           
+            <form action="/admin" method="POST" class="diag-form">
+                <input type="text" name="ip" value="127.0.0.1" required class="diag-input" placeholder="Enter IP address">
+                <button type="submit" class="diag-btn">Run Ping</button>
+            </form>
+
+            {% if ping_result %}
+                <div class="diag-terminal">
+                    <pre style="margin: 0;">{{ ping_result }}</pre>
+                </div>
+            {% endif %}
+        </div>
+
+        <a href="/products" class="btn-back">Back to Marketplace</a>
+    </div>
+</body>
+</html>
