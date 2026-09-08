@@ -17,7 +17,7 @@ the marketplace contains the following intentional flaws:
 * **stored xss:** lack of input sanitization on product descriptions allows script injection.
 * **idor:** deleting products without checking if the user actually owns them.
 * **broken authentication:** plaintext password storage and lack of proper admin session validation.
-* **unrestricted file upload:** no extension or content checks on product images, allowing malicious html/script uploads.
+* **unrestricted file upload:** no extension or content checks on product images, allowing malicious uploads.
 * **os command injection (rce):** unsanitized input in the admin ping tool allows executing system commands.
 
 ## tech stack
